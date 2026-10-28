@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IASS — Intelligent Active Surveillance System</title>
+<link rel="stylesheet" href="/static/css/app_shell.css">
+</head>
+<body>
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar">
+    <button class="sidebar-toggle" id="sidebarToggle" title="Collapse navigation" aria-label="Collapse navigation">‹</button>
+    <div class="sidebar-brand">
+      <div class="brand-mark">IASS</div>
+      <div><strong>INTELLIGENT ACTIVE</strong><span>SURVEILLANCE SYSTEM</span></div>
+    </div>
+    <div class="system-chip"><i id="systemDot"></i><span id="systemState">STARTING</span></div>
+    <nav class="side-nav" aria-label="Primary">
+      <a href="/" data-view="dashboard"><span class="nav-icon">◈</span><span>Operations</span><kbd>1</kbd></a>
+      <a href="/security" data-view="security"><span class="nav-icon">!</span><span>Security</span><em id="navThreatCount">0</em></a>
+      <a href="/personnel" data-view="personnel"><span class="nav-icon">◎</span><span>Personnel</span></a>
+      <a href="/hardware" data-view="hardware"><span class="nav-icon">⌘</span><span>Hardware</span></a>
+      <a href="/hardware-config" data-view="hardware-config"><span class="nav-icon">▦</span><span>Hardware Config</span></a>
+      <a href="/logs" data-view="logs"><span class="nav-icon">≡</span><span>Audit</span></a>
+      <a href="/register" data-view="register"><span class="nav-icon">+</span><span>Enrollment</span></a>
+      <div class="nav-divider"></div>
+      <a href="/settings" data-view="settings"><span class="nav-icon">⚙</span><span>Settings</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <div><span>HOST</span><b>V1.1</b></div>
+      <div><span>MODE</span><b id="sidebarMode">LOCAL</b></div>
+    </div>
+  </aside>
+
+  <section class="app-main">
+    <header class="app-header">
+      <div class="header-title">
+        <span class="section-kicker" id="viewKicker">OPERATIONS</span>
+        <h1 id="viewTitle">Live Surveillance</h1>
+      </div>
+      <div class="header-status">
+        <div class="header-metric"><span>AI</span><b id="headerAI">READY</b></div>
+        <div class="header-metric"><span>HARDWARE</span><b id="headerHW">SIMULATION</b></div>
+        <div class="header-metric"><span>CAMERA</span><b id="headerCamera">WAITING</b></div>
+        <button class="icon-button" id="globalRefresh" title="Refresh">↻</button>
+      </div>
+    </header>
+
+    <main class="content" id="appContent">
+      <section class="view view-dashboard" data-view-panel="dashboard">
+        <div class="dashboard-grid">
+          <section class="panel camera-panel">
+            <div class="panel-header">
+              <div><span class="section-kicker">PRIMARY FEED</span><h2>Camera Operations</h2></div>
+              <div class="panel-actions"><span class="status-badge" id="feedBadge">WAITING</span><button class="subtle-btn" id="focusBtn">EXPAND</button><button class="subtle-btn" id="fullscreenBtn">FULLSCREEN</button></div>
+            </div>
+            <div class="camera-strip" id="cameraStrip" aria-label="Camera feeds"></div>
+            <div class="feed-wrap" id="feedWrap">
+              <div class="feed-frame" id="screen">
+                <img id="primaryVideo" src="/video.mjpg" alt="Primary surveillance feed">
+                <div id="overlay"></div>
+                <div class="feed-wait" id="cameraWaiting"><div class="radar"></div><strong>WAITING FOR CAMERA</strong><span>Start the phone camera to begin live perception.</span></div>
+                <div class="feed-label"><b id="screenCamera">CAM-01</b><span id="screenCameraName">MAIN ENTRANCE</span></div>
+                <div class="feed-live">● LIVE</div>
+              </div>
+            </div>
+            <div class="feed-footer">
+              <div><span class="section-kicker">AI ASSESSMENT</span><strong id="aiActivity">Waiting for a live target.</strong></div>
+              <div class="ai-facts"><span>IDENTITY <b id="identity">UNKNOWN</b></span><span>DECISION <b id="auth">—</b></span><span>CONF <b id="confidence">—</b></span><span>TRACK <b id="track">STANDBY</b></span></div>
+            </div>
+          </section>
+          <aside class="ops-rail">
+            <section class="panel compact-panel">
+              <div class="panel-header"><div><span class="section-kicker">CURRENT SUBJECT</span><h2>Active Assessment</h2></div></div>
+              <div class="subject-card"><div class="subject-avatar" id="subjectAvatar">?</div><div><strong id="targetName">NO ACTIVE TARGET</strong><span id="targetMeta">Waiting for perception</span></div></div>
+              <div class="fact-list"><div><span>Location</span><b id="targetLocation">—</b></div><div><span>Risk</span><b id="targetRisk">NORMAL</b></div><div><span>Tracking</span><b id="targetTracking">STANDBY</b></div></div>
+            </section>
+            <section class="panel compact-panel">
+              <div class="panel-header"><div><span class="section-kicker">SECURITY PULSE</span><h2>Recent Events</h2></div><a href="/security" class="text-link">OPEN CENTER</a></div>
+              <div class="event-list" id="dashboardEvents"><div class="empty">No recent events.</div></div>
+            </section>
+            <section class="panel compact-panel quick-panel">
+              <div class="panel-header"><div><span class="section-kicker">OPERATOR</span><h2>Quick Actions</h2></div></div>
+              <div class="quick-actions"><a href="/security" class="action-card"><b>SECURITY</b><span>Review active incidents</span></a><a href="/hardware" class="action-card"><b>HARDWARE</b><span>Inspect live device state</span></a><a href="/personnel" class="action-card"><b>PERSONNEL</b><span>View presence & access</span></a></div>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" data-view-panel="security">
+        <div class="view-toolbar"><div><span class="section-kicker">SECURITY OPERATIONS</span><h2>Security & Emergency Center</h2><p>Active threats, suspicious behavior and incident response are separated from routine surveillance.</p></div><div class="toolbar-actions"><button class="subtle-btn" data-security-filter="all">ALL</button><button class="subtle-btn" data-security-filter="critical">CRITICAL</button><button class="subtle-btn" data-security-filter="warning">WARNING</button></div></div>
+        <div class="security-summary" id="securitySummary"></div>
+        <div class="security-layout">
+          <section class="panel incident-panel"><div class="panel-header"><div><span class="section-kicker">LIVE INCIDENT STREAM</span><h2>Threat & Security Events</h2></div><span class="status-badge danger" id="securityLive">MONITORING</span></div><div class="incident-list" id="incidentList"><div class="empty">No security incidents.</div></div></section>
+          <aside class="panel response-panel"><div class="panel-header"><div><span class="section-kicker">RESPONSE</span><h2>Emergency Controls</h2></div></div><div class="response-warning"><b>Operator controls</b><span>Actions below affect the hardware subsystem. Use only when required.</span></div><button class="danger-button" id="emergencyStop">EMERGENCY STOP / SAFE STATE</button><a class="response-link" href="/hardware">Open hardware control center →</a><div class="response-state" id="responseState">No operator action issued.</div></aside>
+        </div>
+      </section>
+
+      <section class="view" data-view-panel="personnel">
+        <div class="view-toolbar"><div><span class="section-kicker">PERSONNEL INTELLIGENCE</span><h2>Presence & Movement</h2><p>Current observed presence, access history and behavioral context.</p></div><a class="primary-button" href="/register">+ REGISTER PERSON</a></div>
+        <div class="personnel-summary" id="personnelSummary"></div>
+        <div class="personnel-grid"><section class="panel"><div class="panel-header"><div><span class="section-kicker">LIVE PRESENCE</span><h2>People Currently Observed</h2></div><span class="status-badge" id="presenceUpdated">UPDATING</span></div><div class="presence-list" id="presenceList"><div class="empty">No active observations.</div></div></section><section class="panel"><div class="panel-header"><div><span class="section-kicker">ACCESS HISTORY</span><h2>Movement & Entry History</h2></div><a href="/logs" class="text-link">FULL AUDIT</a></div><div class="table-scroll"><table class="data-table"><thead><tr><th>TIME</th><th>PERSON</th><th>EVENT</th><th>CAMERA / DOOR</th><th>DECISION</th></tr></thead><tbody id="movementTable"><tr><td colspan="5" class="empty">No movement records.</td></tr></tbody></table></div></section></div>
+      </section>
+
+      <section class="view" data-view-panel="hardware">
+        <div class="view-toolbar"><div><span class="section-kicker">PHYSICAL SUBSYSTEM</span><h2>Hardware Control Center</h2><p>Live commanded state, reported state, faults and recent hardware actions.</p></div><div class="hardware-mode" id="hardwareMode">SIMULATION</div></div>
+        <div class="hardware-summary" id="hardwareSummary"></div>
+        <div class="hardware-groups" id="hardwareGroups"><div class="empty">Loading hardware state…</div></div>
+        <section class="panel hardware-history"><div class="panel-header"><div><span class="section-kicker">COMMAND HISTORY</span><h2>Recent Hardware Actions</h2></div></div><div class="table-scroll"><table class="data-table"><thead><tr><th>TIME</th><th>DEVICE</th><th>ACTION</th><th>RESULT</th><th>CORRELATION</th></tr></thead><tbody id="hardwareHistory"><tr><td colspan="5" class="empty">No hardware actions.</td></tr></tbody></table></div></section>
+      </section>
+
+      <section class="view" data-view-panel="hardware-config">
+        <div class="view-toolbar"><div><span class="section-kicker">PHYSICAL INSTALLATION</span><h2>Hardware Configuration</h2><p>Define where devices are installed and how cameras, doors and alarms are physically related. This configuration does not contain security decisions.</p></div><div class="toolbar-actions"><button class="subtle-btn" id="hardwareTopologyReload">RELOAD</button><button class="primary-button" id="hardwareTopologySave">SAVE CONFIGURATION</button></div></div>
+        <div class="settings-grid">
+          <section class="panel"><div class="panel-header"><div><span class="section-kicker">INSTALLATION MODEL</span><h2>Compound Topology</h2></div></div><div id="hardwareTopologySummary" class="config-grid"><div class="empty">Loading topology…</div></div><div class="table-scroll"><table class="data-table"><thead><tr><th>DEVICE</th><th>TYPE</th><th>ZONE</th><th>POSITION</th><th>COVERAGE</th><th>RELATIONSHIPS</th></tr></thead><tbody id="hardwareTopologyDevices"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody></table></div></section>
+          <section class="panel"><div class="panel-header"><div><span class="section-kicker">ADVANCED CONFIGURATION</span><h2>Installation Definition</h2></div></div><p class="form-message">The editor changes physical installation metadata only. Hardware protocol, AI, security decisions and firmware remain separate.</p><textarea id="hardwareTopologyEditor" spellcheck="false" style="width:100%;min-height:520px;box-sizing:border-box;font-family:monospace;background:var(--panel-2,#111827);color:inherit;border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:12px"></textarea><div id="hardwareTopologyMessage" class="form-message"></div></section>
+        </div>
+      </section>
+
+      <section class="view" data-view-panel="logs">
+        <div class="view-toolbar"><div><span class="section-kicker">AUDIT</span><h2>System Event History</h2><p>Searchable record of AI observations, security decisions and access activity.</p></div><button class="subtle-btn" id="auditRefresh">REFRESH</button></div>
+        <section class="panel"><div class="filter-bar"><input id="auditSearch" placeholder="Search person, camera or event"><select id="auditAuth"><option value="">All decisions</option><option value="authorized">Authorized</option><option value="unauthorized">Unauthorized</option></select><select id="auditCamera"><option value="">All cameras</option></select></div><div class="table-scroll"><table class="data-table audit-table"><thead><tr><th>TIME</th><th>SUBJECT</th><th>CAMERA</th><th>DECISION</th><th>CONF</th><th>EVENT</th></tr></thead><tbody id="auditTable"><tr><td colspan="6" class="empty">Loading audit records…</td></tr></tbody></table></div></section>
+      </section>
+
+      <section class="view" data-view-panel="register">
+        <div class="view-toolbar"><div><span class="section-kicker">IDENTITY MANAGEMENT</span><h2>Live Enrollment</h2><p>Register personnel from the active camera without leaving the workstation.</p></div></div>
+        <div class="register-grid-new"><section class="panel"><div class="panel-header"><div><span class="section-kicker">CAMERA CAPTURE</span><h2>Enrollment Preview</h2></div><span id="captureState" class="status-badge warning">WAITING</span></div><div class="enroll-preview"><img src="/video.mjpg" alt="Enrollment camera"><div class="enroll-guide"></div><span id="enrollWait">WAITING FOR LIVE CAMERA</span></div></section><section class="panel form-panel"><div class="panel-header"><div><span class="section-kicker">IDENTITY RECORD</span><h2>Personnel Details</h2></div></div><form id="registrationForm"><label>Full name<input name="name" required maxlength="120"></label><label>Identifier<input name="identifier" maxlength="80"></label><label>Role<input name="role" maxlength="80"></label><label>Access level<select name="access_level"><option>STANDARD</option><option>OPERATOR</option><option>ADMIN</option><option>SECURITY</option></select></label><button class="primary-button" type="submit">CAPTURE & REGISTER</button><div id="formMessage" class="form-message"></div></form></section></div>
+      </section>
+
+      <section class="view" data-view-panel="settings">
+        <div class="view-toolbar"><div><span class="section-kicker">SYSTEM CONFIGURATION</span><h2>Settings</h2><p>Runtime controls and configuration visibility. Hardware/AI policy remains centralized in the project configuration.</p></div></div>
+        <div class="settings-grid"><section class="panel"><div class="panel-header"><div><span class="section-kicker">RUNTIME</span><h2>Subsystem Controls</h2></div></div><div class="setting-list"><div><div><b>AI perception</b><span>Enable or pause the perception worker.</span></div><button class="toggle" id="aiToggle"><i></i><span></span></button></div><div><div><b>Camera tracking</b><span>Allow the tracking controller to issue camera movement commands.</span></div><button class="toggle" id="trackingToggle"><i></i><span></span></button></div></div></section><section class="panel"><div class="panel-header"><div><span class="section-kicker">CONFIGURATION</span><h2>Active Configuration</h2></div></div><div class="config-grid" id="configGrid"><div class="empty">Loading configuration…</div></div></section></div>
+      </section>
+    </main>
+  </section>
+</div>
+<script src="/static/js/app_shell.js"></script>
+</body></html>

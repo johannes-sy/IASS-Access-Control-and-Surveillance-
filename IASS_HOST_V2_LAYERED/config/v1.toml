@@ -1,0 +1,82 @@
+[server]
+host = "0.0.0.0"
+port = 5000
+
+[camera]
+# "phone_browser", "opencv", or "synthetic"
+source = "phone_browser"
+source_url = ""
+fps_limit = 15
+jpeg_quality = 82
+
+[ai]
+enabled = true
+person_detection = true
+face_detection = true
+recognition = true
+recognition_threshold = 0.38
+process_every_n_frames = 2
+embedding_backend = "arcface"
+ambiguity_margin = 0.04
+min_face_size = 45
+min_blur = 20.0
+min_brightness = 25.0
+max_brightness = 235.0
+track_max_missed = 8
+track_iou = 0.20
+handoff_timeout = 3.0
+
+[tracking]
+enabled = false
+pan_kp = 0.045
+pan_deadband_px = 45
+max_step_command = 8
+command_interval_ms = 120
+
+[serial]
+enabled = false
+port = "/dev/ttyACM0"
+baud = 115200
+
+[storage]
+database = "data/iass.db"
+recordings = "data/recordings"
+
+[hardware]
+enabled = true
+# Safe by default until physical MCU firmware and feedback sensors are installed.
+simulation = true
+topology = "config/hardware_topology.json"
+camera_ids = ["camera_mount_1", "camera_mount_2", "camera_mount_3"]
+door_ids = ["door_1", "door_2"]
+alarm_ids = ["alarm_1", "alarm_2"]
+
+[hardware.zone_policies.MAIN_ENTRANCE]
+lock_on_unauthorized = true
+alarm_on_unauthorized = false
+unlock_on_authorized = true
+unlock_duration = 5
+lock_on_suspicious = true
+alarm_on_suspicious = false
+suspicious_dwell_seconds = 10
+high_risk_dwell_seconds = 20
+alarm_on_security_alert = true
+alarm_mode = "SIREN_STROBE"
+alarm_duration = 30
+authorized_access_levels = ["STANDARD", "ADMIN", "SECURITY"]
+repeat_visit_threshold = 3
+alert_on_repeat_visitor = false
+repeat_visitor_alarm_mode = "STROBE_ONLY"
+repeat_visitor_alarm_duration = 5
+
+[hardware.protocol]
+contract_version = 2
+command_dedup_seconds = 0.75
+command_timeout_seconds = 1.0
+max_retries = 2
+heartbeat_interval_seconds = 1.0
+telemetry_timeout_seconds = 3.0
+
+[hardware.tracking]
+min_angle_change = 1.0
+

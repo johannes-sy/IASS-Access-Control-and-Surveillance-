@@ -1,0 +1,7 @@
+const stateEl=document.querySelector('#regCameraState'), waiting=document.querySelector('#regWaiting'), msg=document.querySelector('#regmsg'), peopleEl=document.querySelector('#people');
+function status(v){stateEl.textContent=v;stateEl.className='pill '+(v==='LIVE'?'ready':'warning');waiting.style.display=v==='LIVE'?'none':'flex'}
+async function state(){try{const d=await(await fetch('/api/state',{cache:'no-store'})).json();status(d.camera?.state||'WAITING')}catch(e){status('ERROR')}}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function people(){try{const d=await(await fetch('/api/people',{cache:'no-store'})).json();peopleEl.innerHTML=d.length?d.map(p=>`<div class="person-row"><b>${esc(p.name)}</b><small>${esc(p.identifier||'NO ID')}</small></div>`).join(''):'<div class="muted">No registered personnel.</div>'}catch(e){}}
+document.querySelector('#liveRegister').onsubmit=async e=>{e.preventDefault();msg.textContent='Capturing current camera frame...';msg.className='form-message warning';const fd=new FormData(e.target);try{const r=await fetch('/api/register/live',{method:'POST',body:fd});const d=await r.json();if(!r.ok||!d.ok)throw new Error(d.error||'Registration failed');msg.textContent='Face captured and registered successfully.';msg.className='form-message ready';e.target.reset();people()}catch(err){msg.textContent=err.message;msg.className='form-message danger'}};
+setInterval(state,500);setInterval(people,2500);state();people();

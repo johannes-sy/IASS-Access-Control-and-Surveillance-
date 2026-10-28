@@ -1,0 +1,30 @@
+{
+  "site": {"site_id":"site_1","name":"IASS Compound"},
+  "buildings": [{"building_id":"building_a","name":"Building A","site_id":"site_1"}],
+  "floors": [{"floor_id":"floor_1","name":"Floor 1","building_id":"building_a"}],
+  "zones": [
+    {"zone_id":"main_entrance","name":"Main Entrance","floor_id":"floor_1","zone_type":"ENTRY","restricted":false,"metadata":{}},
+    {"zone_id":"room_3","name":"Room 3","floor_id":"floor_1","zone_type":"ROOM","restricted":false,"metadata":{}},
+    {"zone_id":"back_entrance","name":"Back Entrance","floor_id":"floor_1","zone_type":"ENTRY","restricted":true,"metadata":{}}
+  ],
+  "installations": [
+    {"device_id":"camera_mount_1","device_type":"CAMERA_MOUNT","zone_id":"main_entrance","position":"front","orientation":{"pan":0,"tilt":0},"coverage":["main_entrance"],"capabilities":["PAN","TILT","STOP","HOME","POSITION_FEEDBACK"],"driver":"mock","enabled":true,"limits":{"min_pan":-180,"max_pan":180,"min_tilt":-90,"max_tilt":90,"max_speed":1.0},"config":{"camera_id":"CAM-01","servo_index":0}},
+    {"device_id":"camera_mount_2","device_type":"CAMERA_MOUNT","zone_id":"room_3","position":"front","orientation":{"pan":0,"tilt":0},"coverage":["room_3","door_1"],"capabilities":["PAN","TILT","STOP","HOME","POSITION_FEEDBACK"],"driver":"mock","enabled":true,"limits":{"min_pan":-180,"max_pan":180,"min_tilt":-90,"max_tilt":90,"max_speed":1.0},"config":{"camera_id":"CAM-02","servo_index":1}},
+    {"device_id":"camera_mount_3","device_type":"CAMERA_MOUNT","zone_id":"room_3","position":"side","orientation":{"pan":90,"tilt":0},"coverage":["room_3","door_1"],"capabilities":["PAN","TILT","STOP","HOME","POSITION_FEEDBACK"],"driver":"mock","enabled":true,"limits":{"min_pan":-180,"max_pan":180,"min_tilt":-90,"max_tilt":90,"max_speed":1.0},"config":{"camera_id":"CAM-03","servo_index":2}},
+    {"device_id":"door_1","device_type":"DOOR_LOCK","zone_id":"main_entrance","position":"north entrance","orientation":{},"coverage":["main_entrance"],"capabilities":["LOCK","UNLOCK","LOCK_FEEDBACK","DOOR_SENSOR"],"driver":"mock","enabled":true,"limits":{"max_unlock_duration":10},"config":{"door_index":1}},
+    {"device_id":"door_2","device_type":"DOOR_LOCK","zone_id":"back_entrance","position":"south entrance","orientation":{},"coverage":["back_entrance"],"capabilities":["LOCK","UNLOCK","LOCK_FEEDBACK","DOOR_SENSOR"],"driver":"mock","enabled":true,"limits":{"max_unlock_duration":10},"config":{"door_index":2}},
+    {"device_id":"alarm_1","device_type":"ALARM","zone_id":"main_entrance","position":"main alarm","orientation":{},"coverage":["main_entrance"],"capabilities":["SILENT","STROBE","SIREN","SIREN_STROBE"],"driver":"mock","enabled":true,"limits":{"max_duration":120},"config":{"alarm_index":1}},
+    {"device_id":"alarm_2","device_type":"ALARM","zone_id":"room_3","position":"room alarm","orientation":{},"coverage":["room_3"],"capabilities":["SILENT","STROBE","SIREN","SIREN_STROBE"],"driver":"mock","enabled":true,"limits":{"max_duration":120},"config":{"alarm_index":2}}
+  ],
+  "relationships": [
+    {"source":"camera_mount_1","relation":"OBSERVES","target":"door_1","metadata":{}},
+    {"source":"camera_mount_2","relation":"OBSERVES","target":"door_1","metadata":{}},
+    {"source":"camera_mount_3","relation":"OBSERVES","target":"door_1","metadata":{}},
+    {"source":"camera_mount_2","relation":"HANDOFF_TO","target":"camera_mount_3","metadata":{}},
+    {"source":"camera_mount_3","relation":"HANDOFF_TO","target":"camera_mount_2","metadata":{}},
+    {"source":"door_1","relation":"PROTECTED_BY","target":"alarm_1","metadata":{}},
+    {"source":"door_1","relation":"OBSERVED_BY","target":"camera_mount_1","metadata":{}},
+    {"source":"door_1","relation":"OBSERVED_BY","target":"camera_mount_2","metadata":{}},
+    {"source":"door_1","relation":"OBSERVED_BY","target":"camera_mount_3","metadata":{}}
+  ]
+}
