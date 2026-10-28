@@ -1,0 +1,54 @@
+
+# IASS publish safety rules
+
+# Python environments and generated caches
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials.json
+
+# Local databases and runtime state
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+
+# Large AI model weights: distribute separately or use Git LFS
+*.onnx
+*.pt
+*.pth
+*.weights
+
+# Generated firmware/build outputs
+**/build/
+*.elf
+*.hex
+*.eep
+*.o
+*.a
+*.map
+
+# Archives and editor files
+*.zip
+*.tar
+*.tar.gz
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
